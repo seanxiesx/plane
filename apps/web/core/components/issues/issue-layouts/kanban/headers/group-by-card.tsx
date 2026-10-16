@@ -7,8 +7,6 @@
 import React from "react";
 import { observer } from "mobx-react";
 import { useParams } from "next/navigation";
-// lucide icons
-import { Circle } from "lucide-react";
 import { AddOutline, ArrowCollapseOutline, FullScreenOutline } from "@makeplane/propel/icons";
 import { TOAST_TYPE, setToast } from "@plane/propel/toast";
 import type { TIssue, ISearchIssueResponse, TIssueKanbanFilters, TIssueGroupByOptions } from "@plane/types";
@@ -40,7 +38,6 @@ export const HeaderGroupByCard = observer(function HeaderGroupByCard(props: IHea
   const {
     sub_group_by,
     column_id,
-    icon,
     title,
     count,
     collapsedGroups,
@@ -108,31 +105,25 @@ export const HeaderGroupByCard = observer(function HeaderGroupByCard(props: IHea
         />
       )}
       <div
-        className={`relative flex flex-shrink-0 gap-1 py-1.5 ${
+        className={`relative flex flex-shrink-0 gap-2 py-1.5 ${
           verticalAlignPosition ? `w-[44px] flex-col items-center` : `w-full flex-row items-center`
         }`}
       >
-        <div className="flex size-5 flex-shrink-0 items-center justify-center overflow-hidden rounded-xs">
-          {icon ? icon : <Circle width={14} strokeWidth={2} />}
-        </div>
-
         <div
-          className={`relative flex gap-1 ${
-            verticalAlignPosition ? `flex-col items-center` : `w-full flex-row items-baseline overflow-hidden`
+          className={`relative flex items-center gap-2 ${
+            verticalAlignPosition ? `flex-col` : `w-full flex-row overflow-hidden`
           }`}
         >
           <div
-            className={`line-clamp-1 inline-block truncate overflow-hidden font-medium text-primary ${
-              verticalAlignPosition ? `max-h-[400px] vertical-lr` : ``
+            className={`inline-block truncate overflow-hidden text-body-xs-medium uppercase tracking-wider text-tertiary ${
+              verticalAlignPosition ? `max-h-[400px] vertical-lr` : `line-clamp-1`
             }`}
           >
             {title}
           </div>
-          <div
-            className={`flex-shrink-0 text-13 font-medium text-tertiary ${verticalAlignPosition ? `pr-0.5` : `pl-2`}`}
-          >
+          <span className="flex-shrink-0 rounded-full bg-layer-1 px-2 py-0.5 text-11 font-medium text-tertiary">
             {count || 0}
-          </div>
+          </span>
         </div>
 
         {sub_group_by === null && (
