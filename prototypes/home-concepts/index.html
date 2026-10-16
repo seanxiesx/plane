@@ -1,0 +1,52 @@
+<!doctype html>
+<html lang="en" data-theme="light">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Plane Home — Concept prototypes</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;450;500;600;700&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="./plane-tokens.css" />
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="./plane-theme.js"></script>
+    <script src="https://unpkg.com/lucide@latest"></script>
+  </head>
+  <body class="min-h-screen">
+    <div class="mx-auto max-w-[900px] px-6 py-16">
+      <div class="mb-10 flex items-start justify-between">
+        <div>
+          <p class="mb-2 text-13 font-medium uppercase tracking-wide text-tertiary">Plane · Home page</p>
+          <h1 class="text-[32px] font-semibold tracking-[-0.015em] text-primary">Three concepts for a new Home</h1>
+          <p class="mt-2 max-w-[560px] text-15 text-secondary">Standalone prototypes built with Plane's real design tokens, typography and chrome. Each has its own light / dark toggle. Nothing here touches the app.</p>
+        </div>
+        <button id="theme-toggle" class="flex h-8 shrink-0 items-center gap-1.5 rounded-md border border-strong bg-layer-2 px-3 text-13 font-medium text-secondary shadow-raised hover:bg-layer-2-hover"><i data-lucide="sun-moon" class="size-4"></i>Theme</button>
+      </div>
+
+      <div class="grid grid-cols-1 gap-4 sm:grid-cols-3">
+        <a href="./concept-1-today.html" class="group flex flex-col rounded-lg border-[0.5px] border-subtle bg-surface-1 p-5 shadow-raised transition hover:shadow-overlay">
+          <span class="mb-4 flex size-9 items-center justify-center rounded-md bg-accent-subtle text-accent-text"><i data-lucide="sun" class="size-5"></i></span>
+          <span class="text-11 font-medium uppercase tracking-wide text-tertiary">Concept 1</span>
+          <span class="mt-0.5 text-15 font-semibold text-primary">Today</span>
+          <span class="mt-1.5 text-13 leading-relaxed text-tertiary">A calm, single-column start to the day. What's due now, front and centre.</span>
+          <span class="mt-4 flex items-center gap-1 text-13 font-medium text-link">Open<i data-lucide="arrow-right" class="size-3.5 transition group-hover:translate-x-0.5"></i></span>
+        </a>
+        <a href="./concept-2-command-center.html" class="group flex flex-col rounded-lg border-[0.5px] border-subtle bg-surface-1 p-5 shadow-raised transition hover:shadow-overlay">
+          <span class="mb-4 flex size-9 items-center justify-center rounded-md bg-info-subtle text-link"><i data-lucide="layout-dashboard" class="size-5"></i></span>
+          <span class="text-11 font-medium uppercase tracking-wide text-tertiary">Concept 2</span>
+          <span class="mt-0.5 text-15 font-semibold text-primary">Command center</span>
+          <span class="mt-1.5 text-13 leading-relaxed text-tertiary">A dense dashboard: stats, your work, project pulse and activity at a glance.</span>
+          <span class="mt-4 flex items-center gap-1 text-13 font-medium text-link">Open<i data-lucide="arrow-right" class="size-3.5 transition group-hover:translate-x-0.5"></i></span>
+        </a>
+        <a href="./concept-3-editorial.html" class="group flex flex-col rounded-lg border-[0.5px] border-subtle bg-surface-1 p-5 shadow-raised transition hover:shadow-overlay">
+          <span class="mb-4 flex size-9 items-center justify-center rounded-md bg-warning-subtle text-warning-text"><i data-lucide="sparkles" class="size-5"></i></span>
+          <span class="text-11 font-medium uppercase tracking-wide text-tertiary">Concept 3</span>
+          <span class="mt-0.5 text-15 font-semibold text-primary">Editorial</span>
+          <span class="mt-1.5 text-13 leading-relaxed text-tertiary">A warm, guided home led by a greeting, recents and a wall of stickies.</span>
+          <span class="mt-4 flex items-center gap-1 text-13 font-medium text-link">Open<i data-lucide="arrow-right" class="size-3.5 transition group-hover:translate-x-0.5"></i></span>
+        </a>
+      </div>
+    </div>
+    <script>PlaneProto.init();</script>
+  </body>
+</html>

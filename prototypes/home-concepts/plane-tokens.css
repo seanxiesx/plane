@@ -1,0 +1,159 @@
+/*
+ * Plane design tokens — extracted verbatim from @makeplane/propel (OKLCH).
+ * Light values live on [data-theme="light"], dark on [data-theme="dark"].
+ * These are the same semantic aliases the real app renders with.
+ */
+
+[data-theme="light"] {
+  /* Backgrounds */
+  --bg-canvas: oklch(0.9614 0.0013 286.38);
+  --bg-surface-1: oklch(1 0 0);
+  --bg-surface-2: oklch(0.9911 0 0);
+  --bg-layer-1: oklch(0.9821 0 0);
+  --bg-layer-1-hover: oklch(0.9614 0.0013 286.38);
+  --bg-layer-2: oklch(1 0 0);
+  --bg-layer-2-hover: oklch(0.9911 0 0);
+  --bg-layer-3: oklch(0.9614 0.0013 286.38);
+  --bg-layer-3-hover: oklch(0.9396 0.0017 247.84);
+  --bg-layer-transparent-hover: oklch(0.1482 0.0034 196.79 / 4%);
+  --bg-layer-transparent-selected: oklch(0.1482 0.0034 196.79 / 8%);
+  --bg-accent-primary: oklch(0.4799 0.1158 242.91);
+  --bg-accent-primary-hover: oklch(0.4347 0.1041 242.48);
+  --bg-accent-subtle: oklch(0.9847 0.0083 236.56);
+  --bg-accent-subtle-hover: oklch(0.9715 0.0167 230.9);
+  --bg-success-primary: oklch(0.632 0.186 147.37);
+  --bg-success-subtle: oklch(0.9819 0.0181 155.83);
+  --bg-warning-primary: oklch(0.7724 0.1728 65.37);
+  --bg-warning-subtle: oklch(0.9869 0.0214 95.28);
+  --bg-danger-primary: oklch(0.7022 0.1892 22.23);
+  --bg-danger-subtle: oklch(0.9705 0.0129 17.38);
+  --bg-info-subtle: oklch(0.9705 0.0142 254.6);
+  --bg-inverse: oklch(0.1689 0.0021 286.18);
+
+  /* Text */
+  --text-primary: oklch(0.1689 0.0021 286.18);
+  --text-secondary: oklch(0.3225 0.0045 219.62);
+  --text-tertiary: oklch(0.4176 0.0072 239.98);
+  --text-placeholder: oklch(0.4928 0.0079 233.77);
+  --text-on-color: oklch(1 0 0);
+  --text-accent-primary: oklch(0.4347 0.1041 242.48);
+  --text-link: oklch(0.4799 0.1158 242.91);
+  --text-success: oklch(0.4468 0.1187 151.4);
+  --text-warning: oklch(0.557 0.1583 45.36);
+  --text-danger: oklch(0.5095 0.2086 28.51);
+
+  /* Borders */
+  --border-subtle: oklch(0.9396 0.0017 247.84);
+  --border-subtle-1: oklch(0.9123 0.0017 247.84);
+  --border-strong: oklch(0.8782 0.0035 247.86);
+  --border-accent: oklch(0.4799 0.1158 242.91);
+
+  /* Sticky note fills (editor palette) */
+  --sticky-gray: #d6d6d8;
+  --sticky-peach: #ffd5d7;
+  --sticky-pink: #fdd4e3;
+  --sticky-orange: #ffe3cd;
+  --sticky-green: #c3f0de;
+  --sticky-blue: #c5eff9;
+  --sticky-indigo: #c9dafb;
+  --sticky-purple: #e3d8fd;
+  --sticky-ink: oklch(0.1689 0.0021 286.18);
+
+  --shadow-raised: 0px 1px 2px -1px rgb(41 47 61 / 0.06), 0px 1px 3px 0px rgb(41 47 61 / 0.05);
+  --shadow-overlay: 0px 10px 10px -10px rgb(41 47 61 / 0.04), 0px 30px 60px -12px rgb(41 47 61 / 0.1);
+}
+
+[data-theme="dark"] {
+  /* Backgrounds */
+  --bg-canvas: oklch(0.1689 0.0021 230.81);
+  --bg-surface-1: oklch(0.1932 0.002 230.81);
+  --bg-surface-2: oklch(0.2158 0.0025 230.82);
+  --bg-layer-1: oklch(0.2158 0.0025 230.82);
+  --bg-layer-1-hover: oklch(0.2378 0.0029 230.83);
+  --bg-layer-2: oklch(0.2378 0.0029 230.83);
+  --bg-layer-2-hover: oklch(0.2593 0.0033 230.84);
+  --bg-layer-3: oklch(0.2593 0.0033 230.84);
+  --bg-layer-3-hover: oklch(0.3011 0.0041 230.85);
+  --bg-layer-transparent-hover: oklch(1 0 0 / 5%);
+  --bg-layer-transparent-selected: oklch(1 0 0 / 10%);
+  --bg-accent-primary: oklch(0.6311 0.1263 238.01);
+  --bg-accent-primary-hover: oklch(0.4511 0.087 237.37);
+  --bg-accent-subtle: oklch(0.2029 0.03 232.24);
+  --bg-accent-subtle-hover: oklch(0.2513 0.0418 234.6);
+  --bg-success-primary: oklch(0.7914 0.2091 151.66);
+  --bg-success-subtle: oklch(0.2721 0.0673 152.52);
+  --bg-warning-primary: oklch(0.7724 0.1728 65.37);
+  --bg-warning-subtle: oklch(0.3042 0.0853 45.16);
+  --bg-danger-primary: oklch(0.4446 0.1774 26.79);
+  --bg-danger-subtle: oklch(0.2615 0.085 24.41);
+  --bg-info-subtle: oklch(0.3796 0.1453 265.47);
+  --bg-inverse: oklch(0.9235 0.0017 230.69);
+
+  /* Text */
+  --text-primary: oklch(0.9235 0.0017 230.69);
+  --text-secondary: oklch(0.8455 0.0035 230.72);
+  --text-tertiary: oklch(0.7655 0.0054 230.76);
+  --text-placeholder: oklch(0.6835 0.0074 230.81);
+  --text-on-color: oklch(0.9702 0 0);
+  --text-accent-primary: oklch(0.6311 0.1263 238.01);
+  --text-link: oklch(0.7408 0.1003 233.89);
+  --text-success: oklch(0.9258 0.0845 155.86);
+  --text-warning: oklch(0.829 0.1712 81.04);
+  --text-danger: oklch(0.8053 0.1109 19.78);
+
+  /* Borders */
+  --border-subtle: oklch(0.2593 0.0033 230.84);
+  --border-subtle-1: oklch(0.3011 0.0041 230.85);
+  --border-strong: oklch(0.3415 0.0049 230.86);
+  --border-accent: oklch(0.6311 0.1263 238.01);
+
+  /* Sticky note fills (deepened for dark) */
+  --sticky-gray: #3a3a3d;
+  --sticky-peach: #5c3a3c;
+  --sticky-pink: #5a2f43;
+  --sticky-orange: #5a4230;
+  --sticky-green: #2c4a3e;
+  --sticky-blue: #244a55;
+  --sticky-indigo: #2a3a55;
+  --sticky-purple: #3d3358;
+  --sticky-ink: oklch(0.9235 0.0017 230.69);
+
+  --shadow-raised: 0px 1px 2px -1px rgb(0 0 0 / 0.4), 0px 1px 3px 0px rgb(0 0 0 / 0.3);
+  --shadow-overlay: 0px 10px 20px -10px rgb(0 0 0 / 0.5), 0px 30px 60px -12px rgb(0 0 0 / 0.55);
+}
+
+/* Priority + state accents — theme independent */
+:root {
+  --priority-urgent: oklch(0.5798 0.1766 26.99);
+  --priority-high: oklch(0.6802 0.1633 50.67);
+  --priority-medium: oklch(0.79 0.1466 82.04);
+  --priority-low: oklch(0.579 0.1807 262.31);
+  --priority-none: oklch(0.6376 0.0129 231.77);
+  --state-completed: oklch(0.6166 0.1469 147.06);
+  --state-started: oklch(0.7722 0.1638 71);
+  --state-unstarted: oklch(0.5375 0.0134 264.46);
+  --state-backlog: oklch(0.626 0.0129 264.48);
+  --state-cancelled: oklch(0.6432 0.0396 266.51);
+}
+
+html, body { height: 100%; }
+body {
+  font-family: "Inter", ui-sans-serif, system-ui, sans-serif;
+  font-weight: 450;
+  background: var(--bg-canvas);
+  color: var(--text-primary);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  letter-spacing: -0.002em;
+}
+* { font-variant-ligatures: none; }
+
+/* thin, low-noise scrollbars like the app */
+.scroll-thin::-webkit-scrollbar { width: 10px; height: 10px; }
+.scroll-thin::-webkit-scrollbar-thumb {
+  background: var(--bg-layer-transparent-selected);
+  border: 3px solid transparent;
+  background-clip: padding-box;
+  border-radius: 9999px;
+}
+.scroll-thin::-webkit-scrollbar-track { background: transparent; }
