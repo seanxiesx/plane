@@ -29,6 +29,7 @@ import { IssueIdentifier } from "@/components/issues/issue-detail/issue-identifi
 import { useIssueDetail } from "@/hooks/store/use-issue-detail";
 import { useKanbanView } from "@/hooks/store/use-kanban-view";
 import { useProject } from "@/hooks/store/use-project";
+import { useProjectState } from "@/hooks/store/use-project-state";
 import useIssuePeekOverviewRedirection from "@/hooks/use-issue-peek-overview-redirection";
 import { usePlatformOS } from "@/hooks/use-platform-os";
 // local components
@@ -70,6 +71,34 @@ const KanbanIssueDetailsBlock = observer(function KanbanIssueDetailsBlock(props:
   const [isMenuActive, setIsMenuActive] = useState(false);
   // hooks
   const { isMobile } = usePlatformOS();
+  const { getStateById } = useProjectState();
+
+  // derived values
+  const stateColor = getStateById(issue.state_id)?.color;
+
+  // Display-property variants so the card reads as a gallery tile:
+  // the metadata line hides labels/assignees, and each footer slot shows only its own property.
+  const metadataDisplayProperties = displayProperties
+    ? { ...displayProperties, labels: false, assignee: false }
+    : displayProperties;
+  const FOOTER_OFF = {
+    state: false,
+    priority: false,
+    start_date: false,
+    due_date: false,
+    modules: false,
+    cycle: false,
+    estimate: false,
+    sub_issue_count: false,
+    attachment_count: false,
+    link: false,
+  };
+  const labelDisplayProperties = displayProperties
+    ? { ...displayProperties, ...FOOTER_OFF, assignee: false, labels: displayProperties.labels }
+    : displayProperties;
+  const assigneeDisplayProperties = displayProperties
+    ? { ...displayProperties, ...FOOTER_OFF, labels: false, assignee: displayProperties.assignee }
+    : displayProperties;
 
   const customActionButton = (
     // oxlint-disable-next-line jsx_a11y/click-events-have-key-events oxlint-disable-next-line jsx_a11y/no-static-element-interactions
@@ -94,47 +123,79 @@ const KanbanIssueDetailsBlock = observer(function KanbanIssueDetailsBlock(props:
 
   return (
     <>
-      <div className="relative">
-        {issue.project_id && (
-          <IssueIdentifier
-            issueId={issue.id}
-            projectId={issue.project_id}
-            size="xs"
-            variant="tertiary"
-            displayProperties={displayProperties}
-          />
-        )}
-        {/* oxlint-disable-next-line jsx_a11y/click-events-have-key-events oxlint-disable-next-line jsx_a11y/no-static-element-interactions */}
-        <div
-          className={cn("absolute -top-1 right-0", {
-            "hidden group-hover/kanban-block:block": !isMobile,
-            "!block": isMenuActive,
-          })}
-          onClick={handleEventPropagation}
-        >
-          {quickActions({
-            issue,
-            parentRef: cardRef,
-            customActionButton,
-          })}
+      {/* cover strip in the state color, flush to the top edge of the card */}
+      <span className="block h-1.5 w-full flex-shrink-0" style={{ backgroundColor: stateColor ?? "transparent" }} />
+
+      <div className="space-y-3 p-3.5">
+        <div className="relative">
+          {issue.project_id && (
+            <IssueIdentifier
+              issueId={issue.id}
+              projectId={issue.project_id}
+              size="xs"
+              variant="tertiary"
+              displayProperties={displayProperties}
+            />
+          )}
+          {/* oxlint-disable-next-line jsx_a11y/click-events-have-key-events oxlint-disable-next-line jsx_a11y/no-static-element-interactions */}
+          <div
+            className={cn("absolute -top-1 right-0", {
+              "hidden group-hover/kanban-block:block": !isMobile,
+              "!block": isMenuActive,
+            })}
+            onClick={handleEventPropagation}
+          >
+            {quickActions({
+              issue,
+              parentRef: cardRef,
+              customActionButton,
+            })}
+          </div>
+        </div>
+
+        <Tooltip label={issue.name} layout="stacked" disabled={isMobile}>
+          <div className="line-clamp-3 w-full text-16 font-bold leading-6 text-accent-primary">
+            <span>{issue.name}</span>
+          </div>
+        </Tooltip>
+
+        {/* metadata — a single, muted line */}
+        <IssueProperties
+          className="flex items-center gap-2 overflow-hidden whitespace-nowrap text-tertiary"
+          issue={issue}
+          displayProperties={metadataDisplayProperties}
+          activeLayout="Kanban"
+          updateIssue={updateIssue}
+          isReadOnly={isReadOnly}
+          isEpic={isEpic}
+        />
+
+        {/* footer — label pills on the left, stacked assignee avatars on the right */}
+        <div className="flex min-h-5 items-center justify-between gap-2">
+          <div className="flex min-w-0 flex-wrap items-center gap-1.5 overflow-hidden">
+            <IssueProperties
+              className="flex flex-wrap items-center gap-1.5"
+              issue={issue}
+              displayProperties={labelDisplayProperties}
+              activeLayout="Kanban"
+              updateIssue={updateIssue}
+              isReadOnly={isReadOnly}
+              isEpic={isEpic}
+            />
+          </div>
+          <div className="flex-shrink-0">
+            <IssueProperties
+              className="flex items-center"
+              issue={issue}
+              displayProperties={assigneeDisplayProperties}
+              activeLayout="Kanban"
+              updateIssue={updateIssue}
+              isReadOnly={isReadOnly}
+              isEpic={isEpic}
+            />
+          </div>
         </div>
       </div>
-
-      <Tooltip label={issue.name} layout="stacked" disabled={isMobile}>
-        <div className="line-clamp-1 w-full text-body-sm-medium text-primary">
-          <span>{issue.name}</span>
-        </div>
-      </Tooltip>
-
-      <IssueProperties
-        className="flex flex-wrap items-center gap-2 pt-1.5 whitespace-nowrap text-tertiary"
-        issue={issue}
-        displayProperties={displayProperties}
-        activeLayout="Kanban"
-        updateIssue={updateIssue}
-        isReadOnly={isReadOnly}
-        isEpic={isEpic}
-      />
     </>
   );
 });
@@ -243,7 +304,7 @@ export const KanbanIssueBlock = observer(function KanbanIssueBlock(props: IssueB
       <div
         id={`issue-${issueId}`}
         // make Z-index higher at the beginning of drag, to have a issue drag image of issue block without any overlaps
-        className={cn("group/kanban-block relative mb-2", { "z-[1]": isCurrentBlockDragging })}
+        className={cn("group/kanban-block relative mb-3", { "z-[1]": isCurrentBlockDragging })}
         onDragStart={() => {
           if (isDragAllowed) setIsCurrentBlockDragging(true);
           else {
@@ -262,18 +323,17 @@ export const KanbanIssueBlock = observer(function KanbanIssueBlock(props: IssueB
           href={workItemLink}
           ref={cardRef}
           className={cn(
-            "block w-full rounded-lg border border-subtle bg-layer-2 p-3 text-13 shadow-raised-100 outline-[0.5px] outline-transparent transition-all hover:border-strong hover:shadow-raised-200",
+            "block w-full overflow-hidden rounded-lg border-[3px] border-strong bg-layer-2 text-13 shadow-raised-100 outline-[0.5px] outline-transparent transition-all hover:border-accent-strong hover:shadow-raised-200",
             { "hover:cursor-pointer": isDragAllowed },
-            { "border border-accent-strong hover:border-accent-strong": getIsIssuePeeked(issue.id) },
+            { "border-accent-strong hover:border-accent-strong": getIsIssuePeeked(issue.id) },
             { "z-[100] bg-layer-1": isCurrentBlockDragging }
           )}
           onClick={() => handleIssuePeekOverview(issue)}
           disabled={!!issue?.tempId}
         >
           <RenderIfVisible
-            classNames="space-y-2"
             root={scrollableContainerRef}
-            defaultHeight="100px"
+            defaultHeight="140px"
             horizontalOffset={100}
             verticalOffset={200}
             defaultValue={shouldRenderByDefault}
