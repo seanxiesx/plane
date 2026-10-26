@@ -29,6 +29,7 @@ import { IssueIdentifier } from "@/components/issues/issue-detail/issue-identifi
 import { useIssueDetail } from "@/hooks/store/use-issue-detail";
 import { useKanbanView } from "@/hooks/store/use-kanban-view";
 import { useProject } from "@/hooks/store/use-project";
+import { useProjectState } from "@/hooks/store/use-project-state";
 import useIssuePeekOverviewRedirection from "@/hooks/use-issue-peek-overview-redirection";
 import { usePlatformOS } from "@/hooks/use-platform-os";
 // local components
@@ -70,6 +71,34 @@ const KanbanIssueDetailsBlock = observer(function KanbanIssueDetailsBlock(props:
   const [isMenuActive, setIsMenuActive] = useState(false);
   // hooks
   const { isMobile } = usePlatformOS();
+  const { getStateById } = useProjectState();
+
+  // derived values
+  const stateColor = getStateById(issue.state_id)?.color;
+
+  // Display-property variants so the card reads as a gallery tile:
+  // the details row hides labels/assignees, which render in their own slots.
+  const metadataDisplayProperties = displayProperties
+    ? { ...displayProperties, labels: false, assignee: false }
+    : displayProperties;
+  const FOOTER_OFF = {
+    state: false,
+    priority: false,
+    start_date: false,
+    due_date: false,
+    modules: false,
+    cycle: false,
+    estimate: false,
+    sub_issue_count: false,
+    attachment_count: false,
+    link: false,
+  };
+  const labelDisplayProperties = displayProperties
+    ? { ...displayProperties, ...FOOTER_OFF, assignee: false, labels: displayProperties.labels }
+    : displayProperties;
+  const assigneeDisplayProperties = displayProperties
+    ? { ...displayProperties, ...FOOTER_OFF, labels: false, assignee: displayProperties.assignee }
+    : displayProperties;
 
   const customActionButton = (
     // oxlint-disable-next-line jsx_a11y/click-events-have-key-events oxlint-disable-next-line jsx_a11y/no-static-element-interactions
@@ -93,20 +122,32 @@ const KanbanIssueDetailsBlock = observer(function KanbanIssueDetailsBlock(props:
   useOutsideClickDetector(menuActionRef, () => setIsMenuActive(false));
 
   return (
-    <>
-      <div className="relative">
+    <div className="relative px-3 py-2 pl-3.5">
+      {/* slim state-color edge on the left */}
+      <span
+        className="pointer-events-none absolute inset-y-0 left-0 w-[3px]"
+        style={{ backgroundColor: stateColor ?? "transparent" }}
+      />
+
+      {/* one line: identifier then title; the full title stays reachable via the tooltip */}
+      <div className="relative flex h-5 items-center gap-2">
         {issue.project_id && (
-          <IssueIdentifier
-            issueId={issue.id}
-            projectId={issue.project_id}
-            size="xs"
-            variant="tertiary"
-            displayProperties={displayProperties}
-          />
+          <div className="flex-shrink-0">
+            <IssueIdentifier
+              issueId={issue.id}
+              projectId={issue.project_id}
+              size="xs"
+              variant="tertiary"
+              displayProperties={displayProperties}
+            />
+          </div>
         )}
+        <Tooltip label={issue.name} layout="stacked" disabled={isMobile}>
+          <div className="min-w-0 flex-1 truncate text-13 font-medium leading-5 text-primary">{issue.name}</div>
+        </Tooltip>
         {/* oxlint-disable-next-line jsx_a11y/click-events-have-key-events oxlint-disable-next-line jsx_a11y/no-static-element-interactions */}
         <div
-          className={cn("absolute -top-1 right-0", {
+          className={cn("absolute top-1/2 right-0 -translate-y-1/2 rounded-sm bg-layer-2", {
             "hidden group-hover/kanban-block:block": !isMobile,
             "!block": isMenuActive,
           })}
@@ -120,22 +161,41 @@ const KanbanIssueDetailsBlock = observer(function KanbanIssueDetailsBlock(props:
         </div>
       </div>
 
-      <Tooltip label={issue.name} layout="stacked" disabled={isMobile}>
-        <div className="line-clamp-1 w-full text-body-sm-medium text-primary">
-          <span>{issue.name}</span>
+      {/* one row: details and labels flow on the left, stacked assignee avatars on the right */}
+      <div className="mt-1.5 flex items-center justify-between gap-2">
+        <div className="flex min-w-0 flex-1 flex-wrap items-center gap-1.5 text-tertiary">
+          <IssueProperties
+            className="contents"
+            issue={issue}
+            displayProperties={metadataDisplayProperties}
+            activeLayout="Kanban"
+            updateIssue={updateIssue}
+            isReadOnly={isReadOnly}
+            isEpic={isEpic}
+          />
+          <IssueProperties
+            className="contents"
+            issue={issue}
+            displayProperties={labelDisplayProperties}
+            activeLayout="Kanban"
+            updateIssue={updateIssue}
+            isReadOnly={isReadOnly}
+            isEpic={isEpic}
+          />
         </div>
-      </Tooltip>
-
-      <IssueProperties
-        className="flex flex-wrap items-center gap-2 pt-1.5 whitespace-nowrap text-tertiary"
-        issue={issue}
-        displayProperties={displayProperties}
-        activeLayout="Kanban"
-        updateIssue={updateIssue}
-        isReadOnly={isReadOnly}
-        isEpic={isEpic}
-      />
-    </>
+        <div className="flex-shrink-0">
+          <IssueProperties
+            className="flex items-center"
+            issue={issue}
+            displayProperties={assigneeDisplayProperties}
+            activeLayout="Kanban"
+            updateIssue={updateIssue}
+            isReadOnly={isReadOnly}
+            isEpic={isEpic}
+          />
+        </div>
+      </div>
+    </div>
   );
 });
 
@@ -262,7 +322,7 @@ export const KanbanIssueBlock = observer(function KanbanIssueBlock(props: IssueB
           href={workItemLink}
           ref={cardRef}
           className={cn(
-            "block w-full rounded-lg border border-subtle bg-layer-2 p-3 text-13 shadow-raised-100 outline-[0.5px] outline-transparent transition-all hover:border-strong hover:shadow-raised-200",
+            "block w-full overflow-hidden rounded-lg border border-subtle bg-layer-2 text-13 shadow-raised-100 outline-[0.5px] outline-transparent transition-all hover:border-strong hover:shadow-raised-200",
             { "hover:cursor-pointer": isDragAllowed },
             { "border border-accent-strong hover:border-accent-strong": getIsIssuePeeked(issue.id) },
             { "z-[100] bg-layer-1": isCurrentBlockDragging }
@@ -271,9 +331,8 @@ export const KanbanIssueBlock = observer(function KanbanIssueBlock(props: IssueB
           disabled={!!issue?.tempId}
         >
           <RenderIfVisible
-            classNames="space-y-2"
             root={scrollableContainerRef}
-            defaultHeight="100px"
+            defaultHeight="64px"
             horizontalOffset={100}
             verticalOffset={200}
             defaultValue={shouldRenderByDefault}
